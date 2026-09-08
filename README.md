@@ -30,15 +30,48 @@ Empresa de 25 trabajadores que necesita un MVP de escritorio/web para registrar 
 
 ```
 mvp-asistencia/
-├── index.html   # Estructura: login, marcaje, panel admin
-├── style.css    # Estilos (paleta y tipografía propias del proyecto)
-├── script.js    # Clases del dominio + lógica de interfaz
+├── index.html          # Estructura: login, marcaje, panel admin
+├── style.css           # Estilos (paleta y tipografía propias del proyecto)
+├── script.js           # Controlador de interfaz (DOM)
+├── js/
+│   └── models.js        # Clases del dominio (Usuario, Administrador,
+│                         # RegistroAsistencia, Reporte, Sistema)
+├── tests/
+│   └── models.test.js   # Pruebas unitarias (Jest) de GU-01/02/03 y CA-01
+├── package.json
+├── diagramas/            # Diagramas PlantUML (sistema, programa, DFD, actividades)
+├── basedatos/            # Script SQL 3FN + diagrama ER PlantUML
 └── README.md
 ```
 
-## Cómo ejecutarlo
+Las clases de dominio viven en `js/models.js`, separadas del controlador de interfaz (`script.js`). Esto permite reutilizarlas tanto en el navegador (cargando `models.js` antes de `script.js` en `index.html`) como en Node.js para las pruebas unitarias, sin duplicar la lógica de negocio en dos lugares.
 
-No requiere instalación ni backend. Basta con abrir `index.html` en cualquier navegador moderno (Chrome, Edge, Firefox).
+## Cómo levantar el proyecto desde cero
+
+1. Crea una base de datos MySQL/MariaDB llamada `clockin` desde HeidiSQL.
+2. Ejecuta [`basedatos/clockin_schema_mysql.sql`](basedatos/clockin_schema_mysql.sql) sobre esa base de datos.
+3. Copia `.env.example` como `.env` y completa usuario, contraseña y nombre de la base de datos.
+4. Instala las dependencias con `npm install`.
+5. Levanta el backend con `npm run start`.
+6. Abre `index.html` en el navegador. El backend queda disponible en `http://localhost:3000`.
+
+El navegador se comunica con MySQL únicamente a través de `server.js`, que expone la API REST con Express y `mysql2`.
+
+## Pruebas unitarias
+
+Se usan pruebas unitarias con **Jest** sobre las clases de dominio, cubriendo:
+
+- **Gestión de usuarios**: crear (GU-01), modificar (GU-02) y eliminar (GU-03) usuario — casos de éxito y de error (correo duplicado, id inexistente).
+- **Control de asistencia**: registrar entrada y registrar salida (CA-01), incluyendo el caso borde de una tercera marca en el mismo día.
+
+Para ejecutarlas (no requieren servidor ni base de datos porque `fetch` está mockeado):
+
+```bash
+npm install
+npm test
+```
+
+Resultado esperado: **14/14 pruebas superadas**.
 
 ## Cuentas de prueba
 
@@ -51,13 +84,6 @@ Hay además dos empleados adicionales precargados (`msoto@empresa.cl`, `crivas@e
 
 ## Persistencia de datos
 
-Para este avance, los datos (usuarios y registros) se mantienen **en memoria** (arrays de JavaScript) y se reinician cada vez que se recarga la página. Esto es intencional: el objetivo del Avance N°1 es validar el modelo de clases y su codificación, no la infraestructura de datos.
+Los usuarios y registros se almacenan en MySQL/MariaDB. `Sistema` usa `fetch()` para consumir los endpoints de `server.js`; no mantiene arrays de usuarios o registros como fuente de verdad. GU-03 usa borrado lógico mediante `activo = FALSE` para conservar el historial.
 
-La clase `Sistema` expone métodos claros y acotados (`crearUsuario`, `marcar`, `reporteAtrasos`, etc.), pensados para que, en una siguiente etapa, puedan respaldarse con una base de datos real (por ejemplo, **MongoDB** vía un backend en Node.js/Express) sin tener que rediseñar la lógica de negocio ya construida aquí.
-
-## Próximos pasos (fuera del alcance de este avance)
-
-- Backend con API REST (Node.js/Express) conectado a MongoDB.
-- Hash de contraseñas (actualmente están en texto plano, válido solo para el prototipo).
-- Validación de sesión persistente (tokens) en lugar de estado en memoria del navegador.
-- Exportación de reportes a PDF/Excel.
+Las contraseñas se mantienen en texto simple únicamente por tratarse de un prototipo universitario local; no se implementan JWT ni sesiones complejas en esta etapa.

@@ -319,6 +319,15 @@ button{ font-family: inherit; cursor: pointer; }
 .panel--active{ display:block; }
 .panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 20px; }
 .panel-sub{ color: var(--ink-soft); font-size: 0.85rem; margin: 2px 0 0; }
+.report-center{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.report-card{ display:flex; flex-direction:column; align-items:flex-start; gap: 10px; padding: 20px; border: 1px solid var(--paper-dim); border-top: 4px solid var(--teal); border-radius: var(--radius); background: var(--paper); }
+.report-card--late{ border-top-color: var(--red); }
+.report-card--early{ border-top-color: var(--brass); }
+.report-card--absent{ border-top-color: var(--teal); }
+.report-card__id{ color: var(--ink-soft); font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; }
+.report-card h3{ margin: 0; font-size: 1.05rem; }
+.report-card p{ min-height: 40px; margin: 0; color: var(--ink-soft); font-size: 0.82rem; line-height: 1.5; }
+.report-card strong{ color: var(--ink); font-family: var(--font-mono); font-size: 0.85rem; }
 .row-actions{ display:flex; gap: 8px; }
 .link-btn{
   background:none; border:none; font-family: var(--font-mono); font-size: 0.78rem;
@@ -365,6 +374,7 @@ button{ font-family: inherit; cursor: pointer; }
   .card-clock{ padding: 28px 20px; }
   .panel{ padding: 20px; }
   .panel-head{ flex-direction:column; align-items:flex-start; gap: 10px; }
+  .report-center{ grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce){

@@ -99,6 +99,7 @@
 
   <nav class="admin-tabs">
     <button class="admin-tab admin-tab--active" data-tab="usuarios">Usuarios</button>
+    <button class="admin-tab" data-tab="reportes">Reportes</button>
     <button class="admin-tab" data-tab="atrasos">Atrasos</button>
     <button class="admin-tab" data-tab="anticipadas">Salidas anticipadas</button>
     <button class="admin-tab" data-tab="inasistencias">Inasistencias</button>
@@ -118,6 +119,40 @@
         </thead>
         <tbody id="tabla-usuarios"></tbody>
       </table>
+    </section>
+
+    <!-- --- Centro de reportes (RE-01, RE-02, RE-03) --- -->
+    <section class="panel" id="panel-reportes">
+      <div class="panel-head">
+        <div>
+          <h2>Reportes de asistencia</h2>
+          <p class="panel-sub">Consulta los resultados generados desde los registros de la base de datos.</p>
+        </div>
+        <button id="btn-actualizar-reportes" class="btn btn--ghost btn--sm" type="button">Actualizar</button>
+      </div>
+      <div class="report-center">
+        <article class="report-card report-card--late">
+          <span class="report-card__id">RE-01</span>
+          <h3>Atrasos</h3>
+          <p>Entradas posteriores al horario límite.</p>
+          <strong id="resumen-atrasos">0 resultados</strong>
+          <button class="btn btn--primary btn--sm" type="button" data-report-link="atrasos">Ver reporte</button>
+        </article>
+        <article class="report-card report-card--early">
+          <span class="report-card__id">RE-02</span>
+          <h3>Salidas anticipadas</h3>
+          <p>Salidas anteriores al horario límite.</p>
+          <strong id="resumen-anticipadas">0 resultados</strong>
+          <button class="btn btn--primary btn--sm" type="button" data-report-link="anticipadas">Ver reporte</button>
+        </article>
+        <article class="report-card report-card--absent">
+          <span class="report-card__id">RE-03</span>
+          <h3>Inasistencias</h3>
+          <p>Días sin entrada ni salida en los últimos 7 días.</p>
+          <strong id="resumen-inasistencias">0 resultados</strong>
+          <button class="btn btn--primary btn--sm" type="button" data-report-link="inasistencias">Ver reporte</button>
+        </article>
+      </div>
     </section>
 
     <!-- --- Panel Reporte Atrasos (RE-01) --- -->
@@ -192,6 +227,7 @@
   </div>
 </div>
 
+<script src="js/models.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
